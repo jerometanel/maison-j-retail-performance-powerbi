@@ -15,9 +15,8 @@ table _QA
 	measure 'PVM Check' =
 			
 			( [PVM Price] + [PVM Volume] + [PVM Mix] + [PVM Returns] ) - ( [Net Sales] - CALCULATE ( [Net Sales], SAMEPERIODLASTYEAR ( dim_date[date] ) ) )
+		formatString: 0%;-0%;0%
 		lineageTag: 4d04d20c-2caa-4933-b591-14f3dc24921d
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Tier Mismatch Count' =
 			

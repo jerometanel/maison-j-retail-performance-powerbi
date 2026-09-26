@@ -257,6 +257,28 @@
             "metadata": "QA Tests.Test ID"
           }
         }
+      ],
+      "columnFormatting": [
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "QA Tests.QA Actual"
+          }
+        },
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "QA Tests.Expected"
+          }
+        }
       ]
     },
     "visualContainerObjects": {

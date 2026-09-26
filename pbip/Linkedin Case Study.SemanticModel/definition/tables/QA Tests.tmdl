@@ -26,8 +26,10 @@ table 'QA Tests'
 			       ) + 0,
 			    11, CALCULATE ( [Target Attainment %], REMOVEFILTERS (), dim_date[year] = 2025 )
 			)
-		formatString: #,0
+		formatString: #,##0.###
 		lineageTag: a9787271-3a69-40af-aa5c-b782561c4748
+
+		annotation PBI_FormatHint = {"isCustom":true}
 
 	measure 'QA Status' =
 			
@@ -71,13 +73,15 @@ table 'QA Tests'
 		annotation SummarizationSetBy = Automatic
 
 	column Expected
-		formatString: #,0
+		formatString: #,##0.###
 		lineageTag: 05ccf1e5-629b-4cba-8e92-77fbf634c3f6
 		summarizeBy: sum
 		isNameInferred
 		sourceColumn: [Expected]
 
 		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isCustom":true}
 
 	column Tolerance
 		lineageTag: f788d409-3c6f-40b9-a0d4-3c0dd5246dec

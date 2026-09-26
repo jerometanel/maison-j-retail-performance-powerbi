@@ -107,9 +107,8 @@ table _Sales
 			RETURN p0q1 - p0bar * q1tot
 			
 			```
+		formatString: 0%;-0%;0%
 		lineageTag: d30acce6-b1de-408e-a532-b0a2f619ef5f
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Net Sales PY' = CALCULATE ( [Net Sales], 'Time Intelligence'[Period] = "PY" )
 		formatString: \$#,0.0;(\$#,0.0);\$#,0.0
