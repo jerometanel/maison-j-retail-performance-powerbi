@@ -55,7 +55,7 @@ Conclusions that rely on inventory and targets illustrate the method rather than
 
 ## How to open
 
-1. Clone the repo and open `pbip/Linkedin_Case_Study.pbip` in Power BI Desktop.
+1. Clone the repo and open `pbip/Linkedin Case Study.pbip` in Power BI Desktop.
 2. Go to Home > Transform data > Manage Parameters and set:
    - `SourcePath`: full path to `data/luxury_retail_star_schema.xlsx`
    - `ExtensionPath`: full path to `data/luxury_retail_extensions.xlsx`
