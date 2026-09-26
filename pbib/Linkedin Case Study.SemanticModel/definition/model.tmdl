@@ -1,0 +1,42 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["fact_sales","dim_client","dim_date","dim_product","dim_staff","dim_store","AsOfDate","fact_inventory_snapshot","fact_targets","_Sales","SourcePath","ExtensionPath"]
+
+annotation PBI_ProTooling = ["CalcGroup","TMDLView_Desktop","DevMode"]
+
+ref table fact_sales
+ref table dim_client
+ref table dim_date
+ref table dim_product
+ref table dim_staff
+ref table dim_store
+ref table fact_inventory_snapshot
+ref table fact_targets
+ref table 'Dimension Selector'
+ref table 'Metric Selector'
+ref table 'Time Intelligence'
+ref table 'Tier Band'
+ref table _Sales
+ref table _Client
+ref table _Productivity
+ref table _Category
+ref table _Inventory
+ref table _QA
+ref table 'PVM Step'
+ref table Headlines
+ref table 'Client Status'
+ref table Actions
+ref table 'QA Tests'
+
+ref cultureInfo en-US
+

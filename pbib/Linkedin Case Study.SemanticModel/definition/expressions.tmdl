@@ -1,0 +1,22 @@
+expression AsOfDate = #date(2025, 12, 31) meta [IsParameterQuery=true, Type="Date", IsParameterQueryRequired=true]
+	lineageTag: 72a8d62d-d109-4a48-a770-78ef3d1c8fa7
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Date
+
+/// Folder path to luxury_retail_star_schema.xlsx
+expression SourcePath = "C:\Projects\apac-retail-analytics\data\luxury_retail_star_schema.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: bbf5fade-d399-42e8-ba20-9898eef2119f
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+
+expression ExtensionPath = "C:\Projects\apac-retail-analytics\data\luxury_retail_extensions.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 834945d8-8228-445c-975e-86c0546db60f
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+

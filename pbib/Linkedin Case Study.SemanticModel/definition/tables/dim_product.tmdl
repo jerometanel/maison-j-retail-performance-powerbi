@@ -1,0 +1,265 @@
+table dim_product
+	lineageTag: fb1cac90-4603-455a-b9fe-ebfd43ff0ca9
+
+	column product_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5606e409-80a8-42d2-acfe-2f26d5f21c0d
+		summarizeBy: none
+		sourceColumn: product_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SKU
+		dataType: string
+		lineageTag: fc1d4be8-d4e8-43dd-8a6d-9ef3128d0f68
+		summarizeBy: none
+		sourceColumn: SKU
+
+		annotation SummarizationSetBy = Automatic
+
+	column model_code
+		dataType: string
+		lineageTag: 81fa8ed7-778f-46e6-9a6b-1c1ae9b9bf79
+		summarizeBy: none
+		sourceColumn: model_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		lineageTag: c5285013-22dc-4382-9b04-44afd5cb7406
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column division
+		dataType: string
+		lineageTag: 7bd64d77-1e6d-4e99-b2ba-ca91dd5bf07f
+		summarizeBy: none
+		sourceColumn: division
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: 074c58dd-008f-4724-b973-3bf7aa044850
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column subcategory
+		dataType: string
+		lineageTag: ffb255a2-3599-4c1f-bb92-3d22bc8dd3f9
+		summarizeBy: none
+		sourceColumn: subcategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_line
+		dataType: string
+		lineageTag: 57d99b43-fbc8-4c71-942c-895653886b6e
+		summarizeBy: none
+		sourceColumn: product_line
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		lineageTag: 4d8db690-ef19-4153-a537-5d35041710c6
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column collection
+		dataType: string
+		lineageTag: 8985f3c2-8a45-4814-8e3e-0ffa6e639f87
+		summarizeBy: none
+		sourceColumn: collection
+
+		annotation SummarizationSetBy = Automatic
+
+	column season_year
+		dataType: int64
+		formatString: 0
+		lineageTag: 8e869c2c-ffd6-46db-989b-22e9f81b9c14
+		summarizeBy: none
+		sourceColumn: season_year
+
+		annotation SummarizationSetBy = User
+
+	column launch_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d4fd9abb-7186-4c73-9d6f-06dcf91e46c6
+		summarizeBy: none
+		sourceColumn: launch_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column end_of_life_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: cdaf767b-2844-4ff4-8ae8-09cd0ecc41df
+		summarizeBy: none
+		sourceColumn: end_of_life_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column is_permanent
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8b250d27-4e02-4ca7-a516-e62d0c20b963
+		summarizeBy: none
+		sourceColumn: is_permanent
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_limited_edition
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: ab329eb5-a20d-4980-9d74-a8dc362ba490
+		summarizeBy: none
+		sourceColumn: is_limited_edition
+
+		annotation SummarizationSetBy = Automatic
+
+	column color
+		dataType: string
+		lineageTag: 15160e65-13d0-4692-9fa5-44da7052833b
+		summarizeBy: none
+		sourceColumn: color
+
+		annotation SummarizationSetBy = Automatic
+
+	column material
+		dataType: string
+		lineageTag: 146ede52-6276-42d9-b25d-2e509b3e076a
+		summarizeBy: none
+		sourceColumn: material
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_exotic
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 794da277-6af7-41a0-ba8e-5d5d9bc19279
+		summarizeBy: none
+		sourceColumn: is_exotic
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_iconic
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 13cf1b9c-caab-422c-99ac-712a73418fc4
+		summarizeBy: none
+		sourceColumn: is_iconic
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_entry_product
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 3431b50b-04dc-4ddd-8ef2-f0e1110ffa8c
+		summarizeBy: none
+		sourceColumn: is_entry_product
+
+		annotation SummarizationSetBy = Automatic
+
+	column retail_price_usd
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 127789d4-9268-4535-b5a4-1699cbdc4f56
+		summarizeBy: none
+		sourceColumn: retail_price_usd
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column standard_cost_usd
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 4d0546c7-4a6d-46ef-960c-2f0e8a61c5fb
+		summarizeBy: sum
+		sourceColumn: standard_cost_usd
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column price_band
+		dataType: string
+		lineageTag: 94d41f49-d8ef-401b-8013-92a75a85c8b2
+		summarizeBy: none
+		sourceColumn: price_band
+		sortByColumn: price_band_sort
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_of_manufacture
+		dataType: string
+		lineageTag: 972e910b-8713-43f7-b115-4f9da11e582e
+		summarizeBy: none
+		sourceColumn: country_of_manufacture
+
+		annotation SummarizationSetBy = Automatic
+
+	column lifecycle_status
+		dataType: string
+		lineageTag: 3cb0de84-5504-4129-a4cc-141b0c1282c7
+		summarizeBy: none
+		sourceColumn: lifecycle_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column price_band_sort
+		dataType: int64
+		formatString: 0
+		lineageTag: cb4fd481-d56d-4512-b0ea-69f5133f6182
+		summarizeBy: sum
+		sourceColumn: price_band_sort
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_product = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(SourcePath), null, true),
+				    dim_product_Sheet = Source{[Item="dim_product",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(dim_product_Sheet, [PromoteAllScalars=true]),
+				    #"Removed Blank Rows" = Table.SelectRows(#"Promoted Headers", each [product_key] <> null and [product_key] <> ""),
+				    #"Replaced Value" = Table.ReplaceValue(#"Removed Blank Rows","N/A",null,Replacer.ReplaceValue,{"season_year"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Replaced Value",{{"product_key", Int64.Type}, {"sku", type text}, {"model_code", type text}, {"product_name", type text}, {"division", type text}, {"category", type text}, {"subcategory", type text}, {"product_line", type text}, {"gender", type text}, {"collection", type text}, {"season_year", Int64.Type}, {"launch_date", type date}, {"end_of_life_date", Int64.Type}, {"is_permanent", type logical}, {"is_limited_edition", type logical}, {"color", type text}, {"material", type text}, {"is_exotic", type logical}, {"is_iconic", type logical}, {"is_entry_product", type logical}, {"retail_price_usd", Int64.Type}, {"standard_cost_usd", type number}, {"price_band", type text}, {"country_of_manufacture", type text}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"end_of_life_date", type date}, {"retail_price_usd", Currency.Type}, {"standard_cost_usd", Currency.Type}}),
+				    #"Added Lifecycle" = Table.AddColumn(#"Changed Type1", "lifecycle_status", each
+				        if [is_permanent] = true then "Permanent"
+				        else if [launch_date] <> null and [launch_date] > AsOfDate then "Not Yet Launched"
+				        else if [end_of_life_date] <> null and [end_of_life_date] < AsOfDate then "Discontinued"
+				        else "Active", type text),
+				    #"Added Price Band Sort" = Table.AddColumn(#"Added Lifecycle", "price_band_sort", each
+				        if Text.StartsWith([price_band], "Entry") then 1
+				        else if Text.StartsWith([price_band], "Core") then 2
+				        else 3, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Price Band Sort",{{"sku", "SKU"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

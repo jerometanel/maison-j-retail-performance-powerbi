@@ -1,0 +1,285 @@
+table _Client
+	lineageTag: f3adf671-e3e6-4282-a4a1-2048c1587c70
+
+	measure 'Active Clients' =
+			
+			COUNTROWS (
+			    FILTER ( VALUES ( dim_client[client_key] ), dim_client[client_key] <> -1 && [Net Sales] > 0 )
+			)
+		formatString: 0
+		lineageTag: c5a6cd28-f0be-40ce-8ed8-4f53094e3026
+
+	measure 'Prior 12M Active Clients' =
+			
+			VAR _start = MIN ( dim_date[date] )
+			RETURN
+			    CALCULATE ( [Active Clients], DATESINPERIOD ( dim_date[date], _start - 1, -12, MONTH ) )
+		lineageTag: 0f46671d-8cf2-43cd-9d49-330861d9e43d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Retained Clients' =
+			
+			VAR _start = MIN ( dim_date[date] )
+			VAR _cur = FILTER ( VALUES ( dim_client[client_key] ), dim_client[client_key] <> -1 && [Net Sales] > 0 )
+			VAR _prior =
+			    CALCULATETABLE (
+			        FILTER ( VALUES ( dim_client[client_key] ), dim_client[client_key] <> -1 && [Net Sales] > 0 ),
+			        DATESINPERIOD ( dim_date[date], _start - 1, -12, MONTH )
+			    )
+			RETURN COUNTROWS ( INTERSECT ( _cur, _prior ) )
+		lineageTag: 20d43562-c06b-414a-94fc-328ec7f691e9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Reactivated Clients' =
+			
+			VAR _start = MIN ( dim_date[date] )
+			VAR _cur = FILTER ( VALUES ( dim_client[client_key] ), dim_client[client_key] <> -1 && [Net Sales] > 0 )
+			VAR _prior =
+			    CALCULATETABLE (
+			        FILTER ( VALUES ( dim_client[client_key] ), [Net Sales] > 0 ),
+			        DATESINPERIOD ( dim_date[date], _start - 1, -12, MONTH )
+			    )
+			VAR _older =
+			    CALCULATETABLE (
+			        FILTER ( VALUES ( dim_client[client_key] ), [Net Sales] > 0 ),
+			        REMOVEFILTERS ( dim_date ),
+			        dim_date[date] < EDATE ( _start, -12 )
+			    )
+			RETURN COUNTROWS ( EXCEPT ( INTERSECT ( _cur, _older ), _prior ) )
+		lineageTag: a047040e-91c4-4512-bb0b-67092dd74c97
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'New Clients' =
+			
+			CALCULATE ( DISTINCTCOUNT ( fact_sales[client_key] ), fact_sales[is_new_client] = TRUE (), dim_client[client_key] <> -1 )
+		lineageTag: 05f517d0-7899-4b71-8cc4-273ddda10e6a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Retention Rate' = DIVIDE ( [Retained Clients], [Prior 12M Active Clients] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 1eeb74c6-f379-487d-9889-8f6bc07efba6
+
+	measure 'Lapsed Clients' = [Prior 12M Active Clients] - [Retained Clients]
+		lineageTag: e72b5e51-1f72-407e-81d9-1405c8ed02c5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Identified Clients' = CALCULATE ( COUNTROWS ( dim_client ), dim_client[client_key] <> -1 )
+		lineageTag: faf6c35a-0f55-406a-b4a1-296b4f02e2a0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Identified Net Sales' = CALCULATE ( [Net Sales], dim_client[client_key] <> -1 )
+		lineageTag: f1f44b18-156c-4fda-a125-e6e7e69ee959
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Client Capture Rate' = DIVIDE ( [Identified Net Sales], [Net Sales] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 27829052-71b5-49fd-9edb-ef8aa714043c
+
+	measure 'Top 10% Client Share' =
+			
+			VAR _cl =
+			    FILTER (
+			        ADDCOLUMNS ( VALUES ( dim_client[client_key] ), "@s", [Net Sales] ),
+			        dim_client[client_key] <> -1 && [@s] > 0
+			    )
+			VAR _n = ROUNDUP ( COUNTROWS ( _cl ) * 0.1, 0 )
+			RETURN DIVIDE ( SUMX ( TOPN ( _n, _cl, [@s], DESC ), [@s] ), SUMX ( _cl, [@s] ) )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 73b06bca-2d2e-4d2e-86e1-8687062b90d4
+
+	measure 'Net Sales per Active Client' = DIVIDE ( [Identified Net Sales], [Active Clients] )
+		lineageTag: 8d4e8c82-d4a7-4f53-8156-60de2f6f676b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Clients in Tier' =
+			
+			VAR _min = SELECTEDVALUE ( 'Tier Band'[Min USD] )
+			VAR _max = SELECTEDVALUE ( 'Tier Band'[Max USD] )
+			RETURN
+			    COUNTROWS (
+			        FILTER (
+			            VALUES ( dim_client[client_key] ),
+			            VAR s = [Net Sales]
+			            RETURN dim_client[client_key] <> -1 && s >= _min && s < _max
+			        )
+			    )
+		lineageTag: c36fa6b6-c8b0-41df-99d0-87e248226bc3
+
+	measure 'Sales in Tier' =
+			
+			VAR _min = SELECTEDVALUE ( 'Tier Band'[Min USD] )
+			VAR _max = SELECTEDVALUE ( 'Tier Band'[Max USD] )
+			RETURN
+			    SUMX (
+			        FILTER (
+			            ADDCOLUMNS ( VALUES ( dim_client[client_key] ), "@s", [Net Sales] ),
+			            dim_client[client_key] <> -1 && [@s] >= _min && [@s] < _max
+			        ),
+			        [@s]
+			    )
+		lineageTag: fe83024c-1040-4d00-b504-2999a5795151
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Contactable %' = DIVIDE ( [Contactable Clients], [Identified Clients] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 3aed2ff4-cd36-45fc-b885-567aab2e9628
+
+	measure 'Contactable Clients' =
+			
+			COUNTROWS (
+			    FILTER (
+			        dim_client,
+			        dim_client[client_key] <> -1
+			            && (
+			                ( dim_client[optin_email] = TRUE () && NOT ISBLANK ( dim_client[email] ) )
+			                || ( dim_client[optin_phone] = TRUE () && NOT ISBLANK ( dim_client[phone] ) )
+			                || ( dim_client[optin_messaging] = TRUE () && NOT ISBLANK ( dim_client[phone] ) )
+			            )
+			    )
+			)
+		formatString: #,0
+		lineageTag: 34e5d4cb-7bec-4cbc-91d6-d58e3fd53ce1
+
+	measure 'Entry Converted Clients' =
+			
+			VAR _entry =
+			    CALCULATETABLE (
+			        VALUES ( dim_client[client_key] ),
+			        dim_client[entry_division] IN { "Fragrance and Beauty", "Accessories" },
+			        dim_client[client_key] <> -1
+			    )
+			VAR _upgraded =
+			    CALCULATETABLE (
+			        VALUES ( fact_sales[client_key] ),
+			        REMOVEFILTERS ( dim_date ),
+			        REMOVEFILTERS ( dim_product ),
+			        dim_product[division] IN { "Leather Goods", "Ready-to-Wear" },
+			        fact_sales[transaction_type] = "Sale"
+			    )
+			RETURN COUNTROWS ( INTERSECT ( _entry, _upgraded ) )
+		lineageTag: 1778700d-8685-4591-b463-83d38bf9eb36
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Clients with Email' =
+			
+			CALCULATE ( COUNTROWS ( dim_client ), NOT ISBLANK ( dim_client[email] ), dim_client[client_key] <> -1 )
+		lineageTag: 84ebbfb9-a949-481d-80a9-25e789dd0131
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Clients with Phone' =
+			
+			CALCULATE ( COUNTROWS ( dim_client ), NOT ISBLANK ( dim_client[phone] ), dim_client[client_key] <> -1 )
+		lineageTag: e76c6047-3994-4863-abec-38fd7e9aa56c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Cohort Retention' =
+			
+			VAR _yr = SELECTEDVALUE ( dim_date[year] )
+			VAR _coh = SELECTEDVALUE ( dim_client[cohort_year] )
+			RETURN
+			    IF ( _yr > _coh, DIVIDE ( [Active Clients], COUNTROWS ( dim_client ) ) )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 7f1d9785-7829-4bac-98e2-d39bcfdd977c
+
+	measure 'Entry Clients' =
+			
+			CALCULATE (
+			    COUNTROWS ( dim_client ),
+			    dim_client[entry_division] IN { "Fragrance and Beauty", "Accessories" }
+			)
+		lineageTag: 9dbaead0-d4f0-4d8b-a905-072fd165b9a4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Entry Conversion %' = DIVIDE ( [Entry Converted Clients], [Entry Clients] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: f2a94f6d-5e6b-4c32-9456-8d63c6dffb06
+
+	measure 'Client Movement' =
+			
+			SWITCH (
+			    SELECTEDVALUE ( 'Client Status'[Status] ),
+			    "Retained", [Retained Clients],
+			    "New", [New Clients],
+			    "Reactivated", [Reactivated Clients],
+			    "Lapsed", [Lapsed Clients]
+			)
+		formatString: #,0.0
+		lineageTag: 7288ce97-1a97-48f2-ab9f-549deb8c4118
+
+	measure 'Client Movement Colour' =
+			
+			SWITCH (
+			    SELECTEDVALUE ( 'Client Status'[Status] ),
+			    "Lapsed", "#C0392B",
+			    "Retained", "#2B2B2B",
+			    "#B8962E"
+			)
+		lineageTag: 21da6ee7-b175-422a-9dc7-a7c20bd5204e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Client Header' =
+			
+			SELECTEDVALUE ( dim_client[client_id] ) & "  |  "
+			    & SELECTEDVALUE ( dim_client[Tier 2025 Recomputed] ) & "  |  "
+			    & SELECTEDVALUE ( dim_client[nationality] ) & "  |  Client since "
+			    & FORMAT ( SELECTEDVALUE ( dim_client[first_purchase_date] ), "mmm yyyy" )
+		lineageTag: 69725fd3-74a8-465e-9f28-350ea32895f4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Assigned Advisor' =
+			
+			VAR _k = SELECTEDVALUE ( dim_client[assigned_advisor_key] )
+			RETURN
+			    LOOKUPVALUE ( dim_staff[staff_name], dim_staff[staff_key], _k ) & " ("
+			        & LOOKUPVALUE ( dim_staff[employment_status], dim_staff[staff_key], _k ) & ")"
+		lineageTag: a0f0e6f9-420c-4628-a21d-dee3f668edd0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Preferred Store' =
+			
+			LOOKUPVALUE ( dim_store[store_name], dim_store[store_key], SELECTEDVALUE ( dim_client[preferred_store_key] ) )
+		lineageTag: 438a5215-44c5-4d08-8f56-f7d5490a0684
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Contact Channel' =
+			
+			SELECTEDVALUE ( dim_client[messaging_app] ) & IF ( [Contactable Clients] = 1, " (opted in)", " (not contactable)" )
+		lineageTag: 3d5a095b-fe24-4133-9598-d5a53b8faa99
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: 290d39d9-f1d2-4356-8166-fc8810f71f46
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Client = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 4c5894b8365f47b995359f2dd41ae65a
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

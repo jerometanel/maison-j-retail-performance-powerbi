@@ -1,0 +1,117 @@
+table 'QA Tests'
+	lineageTag: 7976d451-5265-4e3a-9178-0692cb71cf72
+
+	measure 'QA Actual' =
+			
+			SWITCH (
+			    SELECTEDVALUE ( 'QA Tests'[Test ID] ),
+			    1, CALCULATE ( COUNTROWS ( fact_sales ), REMOVEFILTERS () ),
+			    2, CALCULATE ( [Net Sales], REMOVEFILTERS (), dim_date[year] = 2025 ),
+			    3, CALCULATE ( [Net Sales], REMOVEFILTERS (), dim_date[year] = 2024 ),
+			    4, CALCULATE ( [PVM Check], REMOVEFILTERS (), dim_date[year] = 2025 ),
+			    5, CALCULATE ( [Tier Mismatch Count], REMOVEFILTERS () ),
+			    6, CALCULATE ( [Orphaned Clients], REMOVEFILTERS () ),
+			    7, CALCULATE ( [Active Clients], REMOVEFILTERS (), dim_date[year] = 2025 ),
+			    8, CALCULATE (
+			           SUM ( fact_inventory_snapshot[units_sold_net] ) - SUM ( fact_sales[quantity] ),
+			           REMOVEFILTERS ()
+			       ),
+			    9, CALCULATE (
+			           COUNTROWS ( FILTER ( fact_inventory_snapshot, fact_inventory_snapshot[on_hand_units] < 0 ) ),
+			           REMOVEFILTERS ()
+			       ) + 0,
+			    10, CALCULATE (
+			           COUNTROWS ( FILTER ( fact_sales, ISBLANK ( RELATED ( dim_client[client_id] ) ) ) ),
+			           REMOVEFILTERS ()
+			       ) + 0,
+			    11, CALCULATE ( [Target Attainment %], REMOVEFILTERS (), dim_date[year] = 2025 )
+			)
+		formatString: #,0
+		lineageTag: a9787271-3a69-40af-aa5c-b782561c4748
+
+	measure 'QA Status' =
+			
+			VAR _a = [QA Actual]
+			VAR _e = SELECTEDVALUE ( 'QA Tests'[Expected] )
+			VAR _t = SELECTEDVALUE ( 'QA Tests'[Tolerance] )
+			RETURN IF ( ABS ( _a - _e ) <= _t, "PASS", "FAIL" )
+		lineageTag: a06146f9-ae3d-49ff-90dd-c06a154d9d9a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'QA Colour' = IF ( [QA Status] = "PASS", "#2E7D5B", "#C0392B" )
+		lineageTag: 26a06abe-6526-41e1-9b58-dc0b1ce5187c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'QA Summary' =
+			
+			VAR _pass = COUNTROWS ( FILTER ( VALUES ( 'QA Tests'[Test ID] ), [QA Status] = "PASS" ) )
+			RETURN _pass & " of " & COUNTROWS ( 'QA Tests' ) & " tests passed"
+		lineageTag: f78b7179-19d1-41eb-887f-bda55cf5d1df
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Test ID'
+		formatString: 0
+		lineageTag: 78718946-dabc-4ee4-ad4e-8099b785a85c
+		summarizeBy: count
+		isNameInferred
+		sourceColumn: [Test ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Test
+		lineageTag: c727e029-bbea-4675-8807-2d95f8fa5b4e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Test]
+		sortByColumn: 'Test ID'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Expected
+		formatString: #,0
+		lineageTag: 05ccf1e5-629b-4cba-8e92-77fbf634c3f6
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Expected]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tolerance
+		lineageTag: f788d409-3c6f-40b9-a0d4-3c0dd5246dec
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Tolerance]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'QA Tests' = calculated
+		mode: import
+		source =
+				
+				DATATABLE (
+				    "Test ID", INTEGER,
+				    "Test", STRING,
+				    "Expected", DOUBLE,
+				    "Tolerance", DOUBLE,
+				    {
+				        { 1, "fact_sales row count", 14211, 0 },
+				        { 2, "Net Sales 2025 (USD)", 3509704, 1 },
+				        { 3, "Net Sales 2024 (USD)", 4101157, 1 },
+				        { 4, "PVM bridge reconciles to Net Sales change (2025)", 0, 1 },
+				        { 5, "Stored vs recomputed client tier mismatches", 14, 0 },
+				        { 6, "Clients assigned to resigned advisors", 70, 0 },
+				        { 7, "Active clients 2025", 538, 0 },
+				        { 8, "Inventory units sold reconcile to fact_sales", 0, 0 },
+				        { 9, "Negative stock rows", 0, 0 },
+				        { 10, "Sales rows with no matching client", 0, 0 },
+				        { 11, "Target attainment 2025", 0.777, 0.001 }
+				    }
+				)
+
+	annotation PBI_Id = 8ffac7084fac442a84910fcf0870fae3
+

@@ -1,0 +1,263 @@
+table fact_sales
+	lineageTag: 80354a9c-dbf6-44bb-96a3-dd6fba97cd14
+
+	column sales_line_id
+		dataType: string
+		lineageTag: 1ee211ae-1232-44bc-bc90-97b9273d5991
+		summarizeBy: none
+		sourceColumn: sales_line_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_number
+		dataType: string
+		lineageTag: 1ddda0b4-a8fa-45f2-b5fa-07f34f2b2e38
+		summarizeBy: none
+		sourceColumn: transaction_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column line_number
+		dataType: int64
+		formatString: 0
+		lineageTag: c392b000-70bc-4ff3-82c9-fe9ef8511ee9
+		summarizeBy: sum
+		sourceColumn: line_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f503c7e6-e3b7-49c3-af01-2d131e8dd677
+		summarizeBy: none
+		sourceColumn: date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_date
+		dataType: dateTime
+		formatString: dd-mmm-yy
+		lineageTag: 7b03eb9f-7055-4259-9154-6efeb9f2e8a8
+		summarizeBy: none
+		sourceColumn: transaction_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column client_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1d324507-8285-4923-a28c-735a64db8e7b
+		summarizeBy: none
+		sourceColumn: client_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 868b7d64-b9fa-4e88-9afe-38329c90fb61
+		summarizeBy: none
+		sourceColumn: product_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 48eb7478-05b3-4e20-b9b0-b528c3c76e44
+		summarizeBy: none
+		sourceColumn: store_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column staff_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 048c225c-435c-4b49-81b6-6db42ee5a016
+		summarizeBy: none
+		sourceColumn: staff_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel
+		dataType: string
+		lineageTag: 53e7183d-021b-481f-ba8b-1255ccee173e
+		summarizeBy: none
+		sourceColumn: channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_type
+		dataType: string
+		lineageTag: d396ef16-0515-4db9-9cfc-6bd8ff9a4404
+		summarizeBy: none
+		sourceColumn: transaction_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: f0f3b672-c6f0-4f0f-9a71-6b585cbe84de
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column currency
+		dataType: string
+		lineageTag: 9510677f-16f8-4b1b-a764-7a6d725f03b3
+		summarizeBy: none
+		sourceColumn: currency
+
+		annotation SummarizationSetBy = Automatic
+
+	column gross_sales_local
+		dataType: decimal
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: bfea6265-1411-4f9b-91d0-8a0a2fbe9d4c
+		summarizeBy: sum
+		sourceColumn: gross_sales_local
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column discount_local
+		dataType: decimal
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 42bd8a20-7953-4a7f-a9f4-08ad9b83d79d
+		summarizeBy: sum
+		sourceColumn: discount_local
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column net_sales_local
+		dataType: decimal
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 98a71d0d-07ee-4f49-ad7e-32ce1d526a9f
+		summarizeBy: sum
+		sourceColumn: net_sales_local
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column net_sales_usd
+		dataType: decimal
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 854fbbf1-78d5-41a6-952b-64dba9dc2654
+		summarizeBy: sum
+		sourceColumn: net_sales_usd
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column cogs_usd
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: ed0218b1-0313-4b2d-9da6-6a9c02b8e982
+		summarizeBy: sum
+		sourceColumn: cogs_usd
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column is_tax_free
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 96514d97-8838-423d-acd7-3ea494601bb2
+		summarizeBy: none
+		sourceColumn: is_tax_free
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_markdown
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e544161b-4bd1-47ce-803f-4c79ac8319a3
+		summarizeBy: none
+		sourceColumn: is_markdown
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_gift
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 711ba52f-6a96-4381-8a79-e9ebafdd38d3
+		summarizeBy: none
+		sourceColumn: is_gift
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_employee_purchase
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d8ec830b-3bd1-47e8-a809-49ebef28ec7e
+		summarizeBy: none
+		sourceColumn: is_employee_purchase
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_new_client
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 43a49cc9-75b9-4100-b669-031de89174f0
+		summarizeBy: none
+		sourceColumn: is_new_client
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_sales = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(SourcePath), null, true),
+				    fact_sales_Sheet = Source{[Item="fact_sales",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(fact_sales_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"transaction_date", type date}, {"client_key", Int64.Type}, {"product_key", Int64.Type}, {"store_key", Int64.Type}, {"staff_key", Int64.Type}, {"channel", type text}, {"transaction_type", type text}, {"quantity", Int64.Type}, {"currency", type text}, {"gross_sales_local", Currency.Type}, {"discount_local", Currency.Type}, {"net_sales_local", Currency.Type}, {"fx_to_usd", type number}, {"net_sales_usd", Currency.Type}, {"is_tax_free", type logical}, {"is_markdown", type logical}, {"is_gift", type logical}, {"is_employee_purchase", type logical}, {"is_new_client", type logical}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"fx_to_usd"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Removed Columns",{{"cogs_usd", Currency.Type}, {"date_key", Int64.Type}, {"sales_line_id", type text}, {"line_number", Int64.Type}, {"transaction_number", type text}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

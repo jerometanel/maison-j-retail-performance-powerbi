@@ -1,0 +1,88 @@
+table fact_targets
+	lineageTag: c619e3ed-31e9-4e47-999b-38079772ec2f
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 049941c2-f70f-4ad3-83f4-7d84484a0126
+		summarizeBy: none
+		sourceColumn: date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 281329c4-e9ab-4fe0-bf7a-f9b19624e532
+		summarizeBy: none
+		sourceColumn: store_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_target_usd
+		dataType: decimal
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: a1ffe10c-d1ea-4110-815a-9f3bec7d8d3d
+		summarizeBy: sum
+		sourceColumn: sales_target_usd
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column new_client_target
+		dataType: int64
+		formatString: 0
+		lineageTag: 0c2f896c-33ff-4535-99ca-f4600977e912
+		summarizeBy: sum
+		sourceColumn: new_client_target
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_targets = m
+		mode: import
+		source =
+				let
+				    Source = fact_sales,
+				    AddMonthStart = Table.AddColumn(Source, "month_start", each Date.StartOfMonth([transaction_date]), type date),
+				    Grouped = Table.Group(
+				        AddMonthStart,
+				        {"store_key", "month_start"},
+				        {
+				            {"py_net_sales", each List.Sum([net_sales_usd]), type number},
+				            {"py_new_clients", each List.Count(List.Distinct(Table.SelectRows(_, each [is_new_client] = true)[client_key])), Int64.Type}
+				        }
+				    ),
+				    AddTargetMonth = Table.AddColumn(Grouped, "target_month", each Date.AddYears([month_start], 1), type date),
+				    AddGrowth = Table.AddColumn(AddTargetMonth, "growth", each
+				        let y = Date.Year([target_month]) in
+				        if y = 2022 then 0.20
+				        else if y = 2023 then 0.15
+				        else if y = 2024 then 0.12
+				        else if y = 2025 then 0.10
+				        else null, type number),
+				    FilterYears = Table.SelectRows(AddGrowth, each [growth] <> null),
+				    AddSalesTarget = Table.AddColumn(FilterYears, "sales_target_usd", each
+				        Number.Round(List.Max({0, [py_net_sales]}) * (1 + [growth]) / 100) * 100, type number),
+				    AddClientTarget = Table.AddColumn(AddSalesTarget, "new_client_target", each
+				        Number.Round([py_new_clients] * (1 + [growth])), Int64.Type),
+				    AddDateKey = Table.AddColumn(AddClientTarget, "date_key", each
+				        Number.From(Date.ToText([target_month], "yyyyMMdd")), Int64.Type),
+				    Result = Table.SelectColumns(AddDateKey, {"date_key", "store_key", "sales_target_usd", "new_client_target"}),
+				    #"Changed Type" = Table.TransformColumnTypes(Result,{{"sales_target_usd", Currency.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

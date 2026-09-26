@@ -1,0 +1,88 @@
+table Actions
+	lineageTag: ccbeeaaf-724e-4527-95eb-5c0072ec1f20
+
+	column #
+		formatString: 0
+		lineageTag: 0b387287-ea8f-4207-bc5a-c3b0d2ce1c6e
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [#]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Signal
+		lineageTag: 7bdc2141-3172-4510-bb32-c30102e0c7e6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Signal]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Action
+		lineageTag: b2c3c4e4-434c-4cbc-9812-ce65b97a96ad
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Action]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Evidence
+		lineageTag: 157fb6a8-3d0a-4c3d-97d1-2d460573d074
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Evidence]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Size of Prize'
+		lineageTag: 09de8a2b-d137-4f1e-8873-d278d1f09cfe
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Size of Prize]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Owner
+		lineageTag: 00230d7f-41d8-45aa-8a1a-d7502e6b71c4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Owner]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Source Page'
+		lineageTag: b472067d-8429-4954-b3ed-06973ffce215
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Source Page]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Actions = calculated
+		mode: import
+		source =
+				
+				DATATABLE (
+				    "#", INTEGER,
+				    "Signal", STRING,
+				    "Action", STRING,
+				    "Evidence", STRING,
+				    "Size of Prize", STRING,
+				    "Owner", STRING,
+				    "Source Page", STRING,
+				    {
+				        { 1, "-$373K", "Launch a VIC recovery programme for the top 2024 spenders",
+				            "Top 15 clients cut spend by $373K, 63% of the total decline", "About $186K (half recovered)", "CRM Lead, Boutique Managers", "Client and CRM" },
+				        { 2, "-$705K", "Rebuild premium and iconic mix through allocation and client previews",
+				            "Premium band -$705K; iconic share 19.7% to 10.3%", "About $350K (half restored)", "Merchandising", "Category and Product" },
+				        { 3, "70", "Reassign orphaned clients within 30 days",
+				            "70 clients with resigned advisors; 19 still bought $82.5K in 2025", "Protect $82.5K; reactivate 51 inactive", "Boutique Managers", "Advisor Productivity" },
+				        { 4, "-56.7%", "Run a performance review at Sydney Castlereagh",
+				            "Steepest store decline, lowest attribution (84%), weakest book coverage", "About $115K (back to 2024 level)", "Retail Director, Australia", "Market and Store; Advisor Productivity" },
+				        { 5, "$38.4K", "Transfer stock from slow to fast stores and clear aged stock",
+				            "Siam Paragon 12 weeks cover vs Breeze Nanshan 71 and Taipei 101 61", "$38.4K cash released; fewer peak stock-outs", "Supply and Allocation", "Inventory" }
+				    }
+				)
+
+	annotation PBI_Id = 3ad3017d0a2e41b68cc52359f6a015f5
+

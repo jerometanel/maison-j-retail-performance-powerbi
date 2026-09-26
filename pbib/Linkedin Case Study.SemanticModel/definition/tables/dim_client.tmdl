@@ -1,0 +1,289 @@
+table dim_client
+	lineageTag: cd98fbed-2477-43f4-b69d-c0c84a900382
+
+	column client_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 7a97da70-295f-4994-8250-d17b278036ed
+		summarizeBy: none
+		sourceColumn: client_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column client_id
+		dataType: string
+		lineageTag: 7bafb509-ba4a-4cae-89f7-3beaf3b2be9c
+		summarizeBy: none
+		sourceColumn: client_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_name
+		dataType: string
+		lineageTag: 6d02f231-3b45-4add-bb0d-8daffae35150
+		summarizeBy: none
+		sourceColumn: first_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_name
+		dataType: string
+		lineageTag: f53be959-c83f-42d4-8b45-62dc1b6fa5a0
+		summarizeBy: none
+		sourceColumn: last_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		lineageTag: f07b374c-a486-40b3-9ee4-fe312923201b
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column birth_year
+		dataType: int64
+		formatString: 0
+		lineageTag: 5cadf682-f222-4236-be2a-59f3498a53d1
+		summarizeBy: none
+		sourceColumn: birth_year
+
+		annotation SummarizationSetBy = User
+
+	column age_band
+		dataType: string
+		lineageTag: 45ac6b70-e88a-43eb-a660-d18d21de1961
+		summarizeBy: none
+		sourceColumn: age_band
+
+		annotation SummarizationSetBy = Automatic
+
+	column nationality
+		dataType: string
+		lineageTag: 1dd81211-42cf-47fa-82ff-f6cc5d72ddec
+		summarizeBy: none
+		sourceColumn: nationality
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_of_residence
+		dataType: string
+		lineageTag: 998c9584-ad13-4f66-8f3b-16772f5344b3
+		summarizeBy: none
+		sourceColumn: country_of_residence
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_tourist
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0db2ab02-82e0-4be1-8dab-bf5758f0ed62
+		summarizeBy: none
+		sourceColumn: is_tourist
+
+		annotation SummarizationSetBy = Automatic
+
+	column preferred_language
+		dataType: string
+		lineageTag: 55e57e16-3fdd-4ecc-9257-a99f8376fe8d
+		summarizeBy: none
+		sourceColumn: preferred_language
+
+		annotation SummarizationSetBy = Automatic
+
+	column preferred_store_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 03da07e3-0eb7-4271-8201-122b455b5324
+		summarizeBy: sum
+		sourceColumn: preferred_store_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column assigned_advisor_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 18cc1072-bf32-4183-9b98-0a902801f715
+		summarizeBy: sum
+		sourceColumn: assigned_advisor_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column email
+		dataType: string
+		lineageTag: f73c06ac-e360-4386-b0e3-0e6749f05d32
+		summarizeBy: none
+		sourceColumn: email
+
+		annotation SummarizationSetBy = Automatic
+
+	column phone
+		dataType: string
+		lineageTag: e345a535-113a-4403-81a0-96b6d02381c8
+		summarizeBy: none
+		sourceColumn: phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column messaging_app
+		dataType: string
+		lineageTag: 344d3db9-e811-457f-a7f1-22ee29ed35b4
+		summarizeBy: none
+		sourceColumn: messaging_app
+
+		annotation SummarizationSetBy = Automatic
+
+	column optin_email
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 36858d65-b0c9-447a-94af-7132e6748e02
+		summarizeBy: none
+		sourceColumn: optin_email
+
+		annotation SummarizationSetBy = Automatic
+
+	column optin_phone
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 084fa1d3-79a0-48b3-8b68-6654c28cfe6d
+		summarizeBy: none
+		sourceColumn: optin_phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column optin_messaging
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 19298f75-75ef-4186-98a8-56a18738097d
+		summarizeBy: none
+		sourceColumn: optin_messaging
+
+		annotation SummarizationSetBy = Automatic
+
+	column rtw_size
+		dataType: int64
+		formatString: 0
+		lineageTag: a9f90e6d-f859-4a35-b44a-a79ff728f470
+		summarizeBy: sum
+		sourceColumn: rtw_size
+
+		annotation SummarizationSetBy = Automatic
+
+	column shoe_size
+		dataType: double
+		lineageTag: f01256f9-9dff-4821-a7d7-67cbf30a06a1
+		summarizeBy: sum
+		sourceColumn: shoe_size
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column entry_division
+		dataType: string
+		lineageTag: e66d3288-7430-4ed0-bebd-aa4d89fc3984
+		summarizeBy: none
+		sourceColumn: entry_division
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_purchase_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6669a2ef-7952-4ee8-83db-7fa90497da3d
+		summarizeBy: none
+		sourceColumn: first_purchase_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column last_purchase_date
+		dataType: dateTime
+		formatString: dd-mmm-yy
+		lineageTag: df7fca10-d962-4edf-aede-a794cce84a82
+		summarizeBy: none
+		sourceColumn: last_purchase_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column client_tier
+		dataType: string
+		lineageTag: c32c3e6b-024b-489f-bb05-daadae44a565
+		summarizeBy: none
+		sourceColumn: client_tier
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ff314d73-0ad4-41a4-8beb-b26654f34178
+		summarizeBy: none
+		sourceColumn: created_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column cohort_year
+		dataType: int64
+		formatString: 0
+		lineageTag: 5b015db3-ef6a-45d0-9ed2-8386232f5adb
+		summarizeBy: sum
+		sourceColumn: cohort_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tier 2025 Recomputed' =
+			
+			VAR s = CALCULATE ( SUM ( fact_sales[net_sales_usd] ), dim_date[year] = 2025 )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        dim_client[client_key] = -1, "Unknown",
+			        s >= 50000, "VVIC",
+			        s >= 15000, "VIC",
+			        s >= 3000, "Core",
+			        s > 0, "Occasional",
+			        NOT ISBLANK ( dim_client[first_purchase_date] ), "Lapsed",
+			        "Prospect"
+			    )
+		lineageTag: 1c18b117-ae97-450e-8c34-14442d8c3070
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_client = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(SourcePath), null, true),
+				    dim_client_Sheet = Source{[Item="dim_client",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(dim_client_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"client_key", Int64.Type}, {"client_id", type text}, {"first_name", type text}, {"last_name", type text}, {"gender", type text}, {"birth_year", Int64.Type}, {"age_band", type text}, {"nationality", type text}, {"country_of_residence", type text}, {"is_tourist", type logical}, {"preferred_language", type text}, {"preferred_store_key", Int64.Type}, {"assigned_advisor_key", Int64.Type}, {"email", type text}, {"phone", type text}, {"messaging_app", type text}, {"optin_email", type logical}, {"optin_phone", type logical}, {"optin_messaging", type logical}, {"rtw_size", Int64.Type}, {"shoe_size", type number}, {"entry_division", type text}, {"first_purchase_date", Int64.Type}, {"last_purchase_date", Int64.Type}, {"client_tier", type text}, {"advisor_notes", type text}, {"created_date", Int64.Type}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"first_purchase_date", type date}, {"last_purchase_date", type date}, {"created_date", type date}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type1", "Cohort Year", each Date.Year([first_purchase_date])),
+				    #"Removed Columns" = Table.RemoveColumns(#"Added Custom",{"advisor_notes"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"Cohort Year", "cohort_year"}}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Renamed Columns",{{"cohort_year", Int64.Type}})
+				in
+				    #"Changed Type2"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

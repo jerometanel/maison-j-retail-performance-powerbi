@@ -1,0 +1,44 @@
+table _QA
+	lineageTag: e325a629-a189-4598-a236-4c35be086f35
+
+	measure 'Sales Target' = IF ( ISINSCOPE ( dim_date[date] ), BLANK (), SUM ( fact_targets[sales_target_usd] ) )
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 0bdfc2ed-f9d9-422d-888a-6b8c5f99aeb8
+
+	measure 'Target Attainment %' = DIVIDE ( [Net Sales], [Sales Target] )
+		lineageTag: 23660a67-4545-4359-91a1-c830f4cd8526
+
+	measure 'New Client Target' = IF ( ISINSCOPE ( dim_date[date] ), BLANK (), SUM ( fact_targets[new_client_target] ) )
+		formatString: 0
+		lineageTag: 128b5981-51f7-4107-a2eb-b593917127f2
+
+	measure 'PVM Check' =
+			
+			( [PVM Price] + [PVM Volume] + [PVM Mix] + [PVM Returns] ) - ( [Net Sales] - CALCULATE ( [Net Sales], SAMEPERIODLASTYEAR ( dim_date[date] ) ) )
+		lineageTag: 4d04d20c-2caa-4933-b591-14f3dc24921d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Tier Mismatch Count' =
+			
+			COUNTROWS ( FILTER ( dim_client, dim_client[client_tier] <> dim_client[Tier 2025 Recomputed] ) )
+		lineageTag: c3fe4fe3-ff04-4a1b-837a-f6318f29ec60
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: 60c52a28-e598-4009-932e-778f23e85e3f
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _QA = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 1c279ffff9484432866fe9a4e6d3491c
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

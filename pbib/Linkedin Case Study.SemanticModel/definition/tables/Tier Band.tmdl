@@ -1,0 +1,60 @@
+table 'Tier Band'
+	lineageTag: d10d04d6-0b6e-4c71-b55d-d283e6f497c7
+
+	column Tier
+		lineageTag: 46275d2e-5d36-421d-a70b-228bde3d0e3a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tier]
+		sortByColumn: Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Min USD'
+		lineageTag: d1e70af4-63fd-4842-826c-ace18b8246ad
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Min USD]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Max USD'
+		lineageTag: 51bdd1ca-c313-4555-a638-3059d91b2795
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Max USD]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Sort
+		formatString: 0
+		lineageTag: 2f36f22e-9392-428d-84b4-b3bc5565869d
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Sort]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Tier Band' = calculated
+		mode: import
+		source =
+				
+				DATATABLE (
+				    "Tier", STRING,
+				    "Min USD", DOUBLE,
+				    "Max USD", DOUBLE,
+				    "Sort", INTEGER,
+				    {
+				        { "VVIC", 50000, 1000000000, 1 },
+				        { "VIC", 15000, 50000, 2 },
+				        { "Core", 3000, 15000, 3 },
+				        { "Occasional", 0.01, 3000, 4 }
+				    }
+				)
+
+	annotation PBI_Id = a1d5ecfa47944665985ec51af0bf777c
+

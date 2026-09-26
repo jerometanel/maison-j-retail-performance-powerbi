@@ -1,0 +1,44 @@
+table _Category
+	lineageTag: 4bfada2a-f37b-4f7f-8f50-5502df2b497d
+
+	measure 'Mix % of Selection' = DIVIDE ( [Net Sales], CALCULATE ( [Net Sales], ALLSELECTED ( dim_product ) ) )
+		lineageTag: 3721ec78-56c6-4eae-91b7-d88c9e097699
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Iconic Share' = DIVIDE ( CALCULATE ( [Net Sales], dim_product[is_iconic] = TRUE () ), [Net Sales] )
+		formatString: 0.000%;-0.000%;0.000%
+		lineageTag: 4a00382b-d5d5-4666-a461-602b2e2580d7
+
+	measure 'Premium Band Share' = DIVIDE ( CALCULATE ( [Net Sales], dim_product[price_band] = "Premium (5k+)" ), [Net Sales] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 308df5d4-861d-4524-8af7-712cf5a52add
+
+	measure 'Markdown Share' = DIVIDE ( CALCULATE ( [Net Sales], fact_sales[is_markdown] = TRUE () ), [Net Sales] )
+		lineageTag: fe0ba987-37c4-40b3-8f6c-ddd4763e3f59
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Discount Rate' = DIVIDE ( SUM ( fact_sales[discount_local] ) , SUM ( fact_sales[gross_sales_local] ) )
+		lineageTag: bde981fd-3dff-48a4-9248-382498747cc0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: 9358bd3e-3935-4b66-816c-a7616b4e619d
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Category = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 996de3a390344edc9f05312516248f62
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

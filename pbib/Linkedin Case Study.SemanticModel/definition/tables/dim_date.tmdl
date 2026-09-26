@@ -1,0 +1,143 @@
+table dim_date
+	lineageTag: 3b6bacce-9d93-4d77-8a92-eece5ee7806c
+	dataCategory: Time
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3e4c400f-38ad-4d9a-a900-8e280a5dd6a4
+		summarizeBy: none
+		sourceColumn: date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: 7a744f35-6849-4ba2-b3af-799e7a2ca854
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 6e7a6965-8acd-449a-b1ae-6bb4ae23d52c
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = User
+
+	column quarter
+		dataType: string
+		lineageTag: f4740b94-715e-4abf-9dad-990ee1904f32
+		summarizeBy: none
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_num
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c1aed4d6-9ffc-41e2-856b-2c5586a952d6
+		summarizeBy: none
+		sourceColumn: month_num
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column month_name
+		dataType: string
+		lineageTag: a1f44377-f007-41da-85a2-3a5804f38b63
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month_num
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_month
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 670c6750-d69b-4cec-bf19-92b1ad1464c2
+		summarizeBy: none
+		sourceColumn: year_month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column week_of_year
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9408f7a4-3366-4ea6-8fe1-6a76abbb52f9
+		summarizeBy: none
+		sourceColumn: week_of_year
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column day_of_week
+		dataType: string
+		lineageTag: aba8d8e3-f1bf-40fa-97e4-50a64bd2f65f
+		summarizeBy: none
+		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_weekend
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4403f627-d199-421c-959f-41ba7a765fbe
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy Calendar
+		lineageTag: 501d5394-b848-4738-80b3-063405466e96
+
+		level year
+			lineageTag: 587d045f-dadd-467d-b0bc-6a30e81c1f44
+			column: year
+
+		level quarter
+			lineageTag: 0b963702-7bea-4100-b41c-43b89c471334
+			column: quarter
+
+		level month_name
+			lineageTag: 25eba8d6-add9-4062-884b-66b08fbee357
+			column: month_name
+
+		level date
+			lineageTag: 0a436841-39f2-4d6d-bd8f-d18723e89966
+			column: date
+
+	partition dim_date = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Lily\Downloads\luxury_retail_star_schema.xlsx"), null, true),
+				    dim_date_Sheet = Source{[Item="dim_date",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(dim_date_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"date_key", Int64.Type}, {"date", Int64.Type}, {"year", Int64.Type}, {"quarter", type text}, {"month_num", Int64.Type}, {"month_name", type text}, {"year_month", type date}, {"week_of_year", Int64.Type}, {"day_of_week", type text}, {"is_weekend", type logical}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"date", type date}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

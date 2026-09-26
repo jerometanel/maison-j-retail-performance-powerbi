@@ -1,0 +1,189 @@
+table dim_staff
+	lineageTag: 9248acbd-9ce8-4db3-b7ef-6103b1268aff
+
+	column staff_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1877f452-daf4-44fe-8c24-6ec5bcd7861a
+		summarizeBy: none
+		sourceColumn: staff_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column employee_id
+		dataType: string
+		lineageTag: add70dae-06c2-4194-9da1-2dde322723ea
+		summarizeBy: none
+		sourceColumn: employee_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column pos_login
+		dataType: string
+		lineageTag: 9d60c1f9-a0aa-4ec0-b3af-e26514eac731
+		summarizeBy: none
+		sourceColumn: pos_login
+
+		annotation SummarizationSetBy = Automatic
+
+	column staff_name
+		dataType: string
+		lineageTag: 9be97fac-c3cf-4bd5-a755-2b491a18c05b
+		summarizeBy: none
+		sourceColumn: staff_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column job_title
+		dataType: string
+		lineageTag: 67611e5a-8bc0-4c47-9d76-13f09b8b8425
+		summarizeBy: none
+		sourceColumn: job_title
+
+		annotation SummarizationSetBy = Automatic
+
+	column role_type
+		dataType: string
+		lineageTag: ccb768e7-2f1d-4168-a449-97f716025352
+		summarizeBy: none
+		sourceColumn: role_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column specialization
+		dataType: string
+		lineageTag: 4d48768c-1c60-4105-9200-f80fc7d545c6
+		summarizeBy: none
+		sourceColumn: specialization
+
+		annotation SummarizationSetBy = Automatic
+
+	column languages
+		dataType: string
+		lineageTag: d90b5d4a-39ee-4f4a-bffa-16d5efb3f684
+		summarizeBy: none
+		sourceColumn: languages
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_store_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 74f09537-e15d-4782-8da7-524880644f76
+		summarizeBy: sum
+		sourceColumn: home_store_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column market_code
+		dataType: string
+		lineageTag: aa9a9fb9-a065-4513-a8fc-673147628bf3
+		summarizeBy: none
+		sourceColumn: market_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column manager_staff_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0cdea0c6-a241-453d-a90e-8f1f591ca100
+		summarizeBy: sum
+		sourceColumn: manager_staff_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column hire_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1f06a295-61b0-43d4-8344-e6e4357e5173
+		summarizeBy: none
+		sourceColumn: hire_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column contract_type
+		dataType: string
+		lineageTag: 6b8dcfb3-2d62-49d6-833a-f6c5b7772639
+		summarizeBy: none
+		sourceColumn: contract_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column employment_status
+		dataType: string
+		lineageTag: c2a286b8-aba4-4275-85fa-7f68e651d9df
+		summarizeBy: none
+		sourceColumn: employment_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column termination_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 4f07f5f7-7396-4107-8f38-3b11feca6e80
+		summarizeBy: none
+		sourceColumn: termination_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column valid_from
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e50f525c-4128-4fac-8f36-b849caac914a
+		summarizeBy: none
+		sourceColumn: valid_from
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column valid_to
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f68ccba5-f095-4dee-b737-8d1f4b96ff13
+		summarizeBy: none
+		sourceColumn: valid_to
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column is_current
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4e84c26b-21d6-479b-9014-c718c537f840
+		summarizeBy: none
+		sourceColumn: is_current
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_staff = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(SourcePath), null, true),
+				    dim_staff_Sheet = Source{[Item="dim_staff",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(dim_staff_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"staff_key", Int64.Type}, {"employee_id", type text}, {"pos_login", type text}, {"staff_name", type text}, {"job_title", type text}, {"role_type", type text}, {"specialization", type text}, {"languages", type text}, {"home_store_key", Int64.Type}, {"market_code", type text}, {"manager_staff_key", Int64.Type}, {"hire_date", Int64.Type}, {"contract_type", type text}, {"employment_status", type text}, {"termination_date", Int64.Type}, {"valid_from", Int64.Type}, {"valid_to", Int64.Type}, {"is_current", type logical}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"hire_date", type date}, {"termination_date", type date}, {"valid_from", type date}, {"valid_to", type date}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type1", each [staff_key] <> null and [staff_key] <> "")
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

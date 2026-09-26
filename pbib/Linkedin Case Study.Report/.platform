@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Linkedin Case Study"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "34b9ef94-714c-4f2c-b9c2-72ef59699935"
+  }
+}

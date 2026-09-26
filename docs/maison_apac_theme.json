@@ -1,0 +1,35 @@
+{
+  "name": "Maison APAC",
+  "dataColors": ["#2B2B2B", "#B8962E", "#8C8C8C", "#5B6C7D", "#A67C52", "#C8C8C8", "#2E7D5B", "#C0392B"],
+  "background": "#FFFFFF",
+  "foreground": "#2B2B2B",
+  "tableAccent": "#B8962E",
+  "good": "#2E7D5B",
+  "neutral": "#8C8C8C",
+  "bad": "#C0392B",
+  "maximum": "#C0392B",
+  "center": "#F2EEE6",
+  "minimum": "#2E7D5B",
+  "textClasses": {
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 24, "color": "#2B2B2B" },
+    "title": { "fontFace": "Segoe UI Semibold", "fontSize": 14, "color": "#2B2B2B" },
+    "header": { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#2B2B2B" },
+    "label": { "fontFace": "Segoe UI", "fontSize": 10, "color": "#595959" }
+  },
+  "visualStyles": {
+    "page": {
+      "*": {
+        "background": [{ "color": { "solid": { "color": "#FAF8F4" } }, "transparency": 0 }],
+        "outspace": [{ "color": { "solid": { "color": "#EFEBE3" } }, "transparency": 0 }]
+      }
+    },
+    "*": {
+      "*": {
+        "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
+        "border": [{ "show": false }],
+        "dropShadow": [{ "show": false }],
+        "visualHeader": [{ "show": true, "transparency": 0 }]
+      }
+    }
+  }
+}

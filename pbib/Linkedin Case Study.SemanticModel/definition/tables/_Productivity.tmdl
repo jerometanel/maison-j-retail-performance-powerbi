@@ -1,0 +1,101 @@
+table _Productivity
+	lineageTag: ae7dd2fc-3a89-421b-bb98-02d123e3f49c
+
+	measure 'Advisor Net Sales' = CALCULATE ( [Net Sales], dim_staff[role_type] <> "Placeholder" )
+		formatString: \$#,0.0;(\$#,0.0);\$#,0.0
+		lineageTag: eb762f21-d839-4e69-8010-3525c8e65ccc
+
+	measure 'Attribution Rate' = DIVIDE ( [Advisor Net Sales], [Net Sales] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 07b30451-e3e9-4a60-8845-c4547619fbcd
+
+	measure 'Active Selling Advisors' =
+			
+			CALCULATE (
+			    DISTINCTCOUNT ( fact_sales[staff_key] ),
+			    dim_staff[role_type] <> "Placeholder",
+			    fact_sales[transaction_type] = "Sale"
+			)
+		lineageTag: 2d30ecec-0c94-4c61-8c7f-e8c794a0ab3f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Advisor Months' = SUMX ( VALUES ( dim_date[year_month] ), [Active Selling Advisors] )
+		lineageTag: 9e89766d-4ef9-40be-ab01-660f76af216e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sales per Advisor Month' = DIVIDE ( [Advisor Net Sales], [Advisor Months] )
+		formatString: \$#,0.0;(\$#,0.0);\$#,0.0
+		lineageTag: 379f0226-f447-4801-984e-2413b646e3e6
+
+	measure 'Advisor Client Capture' =
+			
+			DIVIDE (
+			    CALCULATE ( [Advisor Net Sales], dim_client[client_key] <> -1, fact_sales[transaction_type] = "Sale" ),
+			    CALCULATE ( [Advisor Net Sales], fact_sales[transaction_type] = "Sale" )
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 987f7396-b4e5-4593-adea-5a4e41c782f2
+
+	measure 'Assigned Clients' =
+			
+			CALCULATE (
+			    COUNTROWS ( dim_client ),
+			    TREATAS ( VALUES ( dim_staff[staff_key] ), dim_client[assigned_advisor_key] )
+			)
+		lineageTag: acd54f57-8f3a-4ce9-ac4d-47f30fbb9053
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Book Clients Purchased' =
+			
+			VAR _book =
+			    CALCULATETABLE (
+			        VALUES ( dim_client[client_key] ),
+			        TREATAS ( VALUES ( dim_staff[staff_key] ), dim_client[assigned_advisor_key] )
+			    )
+			RETURN CALCULATE ( [Active Clients], REMOVEFILTERS ( dim_staff ), _book )
+		lineageTag: 4fe3f7f1-827f-4727-8735-67ac3e12a76f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Book Coverage' = DIVIDE ( [Book Clients Purchased], [Assigned Clients] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 64243f1f-ffc2-41f4-a7c5-908ad9a49867
+
+	measure 'Orphaned Clients' =
+			
+			VAR _resigned =
+			    CALCULATETABLE ( VALUES ( dim_staff[staff_key] ), dim_staff[employment_status] = "Resigned" )
+			RETURN
+			    CALCULATE ( COUNTROWS ( dim_client ), TREATAS ( _resigned, dim_client[assigned_advisor_key] ) )
+		lineageTag: 0fe3f3d9-2230-46c2-bb97-6f364ee1816e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Advisor Label' =
+			
+			SELECTEDVALUE ( dim_staff[staff_name] ) & " | " & SELECTEDVALUE ( dim_staff[job_title] )
+		lineageTag: 073d1f73-8efa-459f-a74f-5993c522cc54
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: 620de76f-19a7-49df-a881-775f3087891a
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Productivity = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 7328491b799c401ca8f61cd6037fdd88
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

@@ -1,0 +1,73 @@
+table _Inventory
+	lineageTag: 00a9dbe4-ad5d-4fe8-a8b6-0ac4287bf9a3
+
+	measure 'Closing On Hand Cost' =
+			
+			CALCULATE (
+			    SUM ( fact_inventory_snapshot[on_hand_cost_usd] ),
+			    LASTNONBLANK ( dim_date[date], CALCULATE ( SUM ( fact_inventory_snapshot[on_hand_cost_usd] ) ) )
+			)
+		formatString: \$#,0.0;(\$#,0.0);\$#,0.0
+		lineageTag: 7d52cf38-b89c-4a26-b9e2-87c3f68bc08e
+
+	measure 'Closing On Hand Units' =
+			
+			CALCULATE (
+			    SUM ( fact_inventory_snapshot[on_hand_units] ),
+			    LASTNONBLANK ( dim_date[date], CALCULATE ( SUM ( fact_inventory_snapshot[on_hand_units] ) ) )
+			)
+		formatString: 0.0
+		lineageTag: 9a099a3e-08c5-4298-811b-f60f50c970a4
+
+	measure 'Sell Through %' = DIVIDE ( [Units Sold], [Units Sold] + [Closing On Hand Units] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 1f16d2ad-0c92-4730-91cb-356a7bba0490
+
+	measure 'Weeks of Cover' =
+			
+			VAR _wk =
+			    DIVIDE ( CALCULATE ( [Units Sold], DATESINPERIOD ( dim_date[date], MAX ( dim_date[date] ), -91, DAY ) ), 13 )
+			RETURN DIVIDE ( [Closing On Hand Units], _wk )
+		formatString: 0.0
+		lineageTag: ac343095-f6dd-4a1e-ad2c-8990b7f7245c
+
+	measure 'Aged Stock %' =
+			
+			VAR _asof = MAX ( dim_date[date] )
+			RETURN
+			    DIVIDE (
+			        CALCULATE ( [Closing On Hand Cost], KEEPFILTERS ( NOT ISBLANK ( dim_product[end_of_life_date] ) && dim_product[end_of_life_date] < _asof ) ),
+			        [Closing On Hand Cost]
+			    )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 2607cb58-4341-403d-8a19-3580016f2957
+
+	measure 'Aged Stock Cost' =
+			
+			VAR _asof = MAX ( dim_date[date] )
+			RETURN
+			    CALCULATE (
+			        [Closing On Hand Cost],
+			        KEEPFILTERS ( NOT ISBLANK ( dim_product[end_of_life_date] ) && dim_product[end_of_life_date] < _asof )
+			    )
+		formatString: \$#,0.0;(\$#,0.0);\$#,0.0
+		lineageTag: 7f6e2897-b099-46d8-8701-94ddcfe66558
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: 20823383-59a6-4055-a117-db5c9ce98949
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Inventory = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 93792f9c77ad4eb88c3ff7763414a3b9
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

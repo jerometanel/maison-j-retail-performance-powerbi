@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "95609c15dee08b50007a",
+  "displayName": "Client and CRM",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "visualInteractions": [
+    {
+      "source": "f66f6970a936708a9b51",
+      "target": "0439db35d3a0b402496c",
+      "type": "NoFilter"
+    }
+  ]
+}

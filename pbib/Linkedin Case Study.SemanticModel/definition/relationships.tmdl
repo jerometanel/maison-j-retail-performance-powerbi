@@ -1,0 +1,40 @@
+relationship AutoDetected_ddb08a07-3346-4ed0-8850-858731dd8704
+	fromColumn: fact_sales.client_key
+	toColumn: dim_client.client_key
+
+relationship AutoDetected_f4730c44-6521-4233-bf28-e9fcf5d860db
+	fromColumn: fact_sales.product_key
+	toColumn: dim_product.product_key
+
+relationship AutoDetected_529af763-e7b6-470a-8d41-73cfdcb3cfd2
+	fromColumn: fact_sales.store_key
+	toColumn: dim_store.store_key
+
+relationship 86d1f61c-13cb-808e-2dac-cc5569bd3b0b
+	fromColumn: fact_sales.date_key
+	toColumn: dim_date.date_key
+
+relationship 2172265e-394b-d280-1a68-37b662e4def2
+	fromColumn: fact_sales.staff_key
+	toColumn: dim_staff.staff_key
+
+relationship ba98b656-a259-55b7-38d1-8d9c2574ff4a
+	fromColumn: fact_targets.date_key
+	toColumn: dim_date.date_key
+
+relationship 68c7adc0-1e37-4432-f24c-615fd2e30116
+	fromColumn: fact_targets.store_key
+	toColumn: dim_store.store_key
+
+relationship 129511bf-7955-8e0d-c022-b6092eb47307
+	fromColumn: fact_inventory_snapshot.date_key
+	toColumn: dim_date.date_key
+
+relationship cfa9a365-a53d-c6b6-b71c-f2ae48a95e2c
+	fromColumn: fact_inventory_snapshot.store_key
+	toColumn: dim_store.store_key
+
+relationship ed49c059-892c-3fe4-dd7a-a328f4ee0714
+	fromColumn: fact_inventory_snapshot.product_key
+	toColumn: dim_product.product_key
+

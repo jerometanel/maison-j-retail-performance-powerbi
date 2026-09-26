@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Linkedin Case Study"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "938a5f92-8ad0-4de9-86a8-8cc670d96896"
+  }
+}

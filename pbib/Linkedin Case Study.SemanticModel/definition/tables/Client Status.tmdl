@@ -1,0 +1,39 @@
+table 'Client Status'
+	lineageTag: aa208d59-d5c0-4398-80f3-299f8d0195fa
+
+	column Status
+		lineageTag: 52dfceae-a7a8-4375-9795-13a0cc42c538
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Status]
+		sortByColumn: Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sort
+		isHidden
+		formatString: 0
+		lineageTag: 2b5afe36-67f0-4a82-b887-a49de305bdba
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Sort]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Client Status' = calculated
+		mode: import
+		source =
+				
+				DATATABLE (
+				    "Status", STRING,
+				    "Sort", INTEGER,
+				    {
+				        { "Retained", 1 },
+				        { "New", 2 },
+				        { "Reactivated", 3 },
+				        { "Lapsed", 4 }
+				    }
+				)
+
+	annotation PBI_Id = 63c463ada2af4cbc8e1cc67e0c4ea939
+

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "ccc670d3043815a94011",
+  "position": {
+    "x": 6.3406718448368613,
+    "y": 0,
+    "z": 2000,
+    "height": 93.373860182370819,
+    "width": 256.77811550151978,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " MAISON J",
+                    "textStyle": {
+                      "fontFamily": "DIN",
+                      "fontSize": "44pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

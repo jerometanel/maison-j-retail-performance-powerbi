@@ -1,0 +1,58 @@
+createOrReplace
+
+	table 'Time Intelligence'
+		lineageTag: 2a43b1b3-6aad-4e77-9ed6-2fa97dca5f2e
+
+		calculationGroup
+
+			calculationItem CY = SELECTEDMEASURE ()
+				ordinal: 0
+
+			calculationItem PY = CALCULATE ( SELECTEDMEASURE (), SAMEPERIODLASTYEAR ( dim_date[date] ) )
+				ordinal: 1
+
+			calculationItem YoY =
+					VAR _cy = SELECTEDMEASURE ()
+					VAR _py = CALCULATE ( SELECTEDMEASURE (), SAMEPERIODLASTYEAR ( dim_date[date] ) )
+					RETURN IF ( NOT ISBLANK ( _cy ) && NOT ISBLANK ( _py ), _cy - _py )
+				ordinal: 2
+
+			calculationItem 'YoY %' =
+					VAR _cy = SELECTEDMEASURE ()
+					VAR _py = CALCULATE ( SELECTEDMEASURE (), SAMEPERIODLASTYEAR ( dim_date[date] ) )
+					RETURN
+					    IF (
+					        ISSELECTEDMEASURE ( [GM %] ),
+					        _cy - _py,
+					        DIVIDE ( _cy - _py, _py )
+					    )
+				ordinal: 3
+				formatStringDefinition = "0.0%"
+
+			calculationItem YTD = CALCULATE ( SELECTEDMEASURE (), DATESYTD ( dim_date[date] ) )
+				ordinal: 4
+
+			calculationItem PYTD = CALCULATE ( SELECTEDMEASURE (), SAMEPERIODLASTYEAR ( DATESYTD ( dim_date[date] ) ) )
+				ordinal: 5
+
+			calculationItem R12M = CALCULATE ( SELECTEDMEASURE (), DATESINPERIOD ( dim_date[date], MAX ( dim_date[date] ), -12, MONTH ) )
+				ordinal: 6
+
+		column Period
+			dataType: string
+			lineageTag: df8aecfc-1d84-4e88-91d1-43acd3d25f37
+			summarizeBy: none
+			sourceColumn: Name
+			sortByColumn: Ordinal
+
+			annotation SummarizationSetBy = Automatic
+
+		column Ordinal
+			dataType: int64
+			formatString: 0
+			lineageTag: 03dc4b9b-8492-49a7-a52c-654528fb16a0
+			summarizeBy: none
+			sourceColumn: Ordinal
+
+			annotation SummarizationSetBy = Automatic
+		

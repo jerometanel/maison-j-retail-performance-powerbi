@@ -1,0 +1,51 @@
+table 'Metric Selector'
+	lineageTag: c09898b5-9bd1-462d-89a1-040d73f08a29
+
+	column 'Metric Selector'
+		lineageTag: 6d28d4af-9244-445a-ad1c-1baed79059ff
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Metric Selector Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Metric Selector Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric Selector Fields'
+		isHidden
+		lineageTag: 24e410d5-3cb7-49c2-b894-25d06a9cd446
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Metric Selector Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric Selector Order'
+		isHidden
+		formatString: 0
+		lineageTag: 8cff51e6-9734-4c86-a87d-13769ba080aa
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Metric Selector' = calculated
+		mode: import
+		source =
+				{
+				    ("Net Sales", NAMEOF('_Sales'[Net Sales]), 0),
+				    ("Units Sold", NAMEOF('_Sales'[Units Sold]), 1),
+				    ("Transactions", NAMEOF('_Sales'[Transactions]), 2),
+				    ("Active Clients", NAMEOF('_Client'[Active Clients]), 3),
+				    ("GM %", NAMEOF('_Sales'[GM %]), 4)
+				}
+
+	annotation PBI_Id = b500cbea301042268312de699fc1d125
+

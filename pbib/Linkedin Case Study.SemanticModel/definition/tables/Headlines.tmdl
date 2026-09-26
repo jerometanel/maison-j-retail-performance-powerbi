@@ -1,0 +1,88 @@
+table Headlines
+	lineageTag: f8037773-810a-429b-8347-d3248adad0c3
+
+	measure 'Category Headline' =
+			
+			VAR _cy = [Premium Band Share]
+			VAR _py = CALCULATE ( [Premium Band Share], 'Time Intelligence'[Period] = "PY" )
+			VAR _icy = [Iconic Share]
+			VAR _ipy = CALCULATE ( [Iconic Share], 'Time Intelligence'[Period] = "PY" )
+			RETURN
+			    "Premium share " & IF ( _cy < _py, "fell", "rose" ) & " from " & FORMAT ( _py, "0.0%" )
+			        & " to " & FORMAT ( _cy, "0.0%" ) & "; iconic share from "
+			        & FORMAT ( _ipy, "0.0%" ) & " to " & FORMAT ( _icy, "0.0%" )
+		lineageTag: 7ea7896e-649f-498b-aad6-76b29917fc05
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Store Headline' =
+			
+			VAR _t = ADDCOLUMNS ( VALUES ( dim_store[store_name] ), "@d", [Net Sales YoY] )
+			VAR _down = COUNTROWS ( FILTER ( _t, [@d] < 0 ) )
+			VAR _all = COUNTROWS ( FILTER ( _t, NOT ISBLANK ( [@d] ) ) )
+			VAR _worst = TOPN ( 1, _t, [@d], ASC )
+			RETURN
+			    _down & " of " & _all & " stores declined; "
+			        & MAXX ( _worst, dim_store[store_name] ) & " fell most ("
+			        & FORMAT ( MINX ( _worst, [@d] ) / 1e3, "$#,0" ) & "K)"
+		lineageTag: 23d2a86a-07ed-4da5-8122-3c5709d017d1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Exec Headline' =
+			
+			VAR _yoy = [Net Sales YoY %]
+			VAR _prem = CALCULATE ( [Net Sales YoY], dim_product[price_band] = "Premium (5k+)" )
+			RETURN
+			    "Net sales " & IF ( _yoy < 0, "fell ", "grew " ) & FORMAT ( ABS ( _yoy ), "0.0%" )
+			        & " vs prior year; Premium band " & IF ( _prem < 0, "lost ", "added " )
+			        & FORMAT ( ABS ( _prem ) / 1e3, "$#,0" ) & "K"
+		lineageTag: 11a51984-5f73-40a2-8de6-82762ab8f32d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Client Headline' =
+			
+			VAR _r = [Retention Rate]
+			VAR _rpy = CALCULATE ( [Retention Rate], 'Time Intelligence'[Period] = "PY" )
+			RETURN
+			    "Retention " & IF ( _r < _rpy, "fell", "rose" ) & " from " & FORMAT ( _rpy, "0.0%" )
+			        & " to " & FORMAT ( _r, "0.0%" ) & "; " & FORMAT ( [Lapsed Clients], "#,0" ) & " clients lapsed"
+		lineageTag: b9aea6d1-13a7-4a18-80fb-99b10ff8dfa3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Advisor Headline' =
+			
+			"Named advisors captured " & FORMAT ( [Attribution Rate], "0.0%" )
+			    & " of sales; " & [Orphaned Clients] & " clients sit with resigned advisors"
+		lineageTag: 5987e234-bb8d-49a2-89ac-a465835ca0e1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Inventory Headline' =
+			
+			"Stock covers " & FORMAT ( [Weeks of Cover], "0" ) & " weeks of demand; "
+			    & FORMAT ( [Aged Stock %], "0.0%" ) & " of stock value is past end of life"
+		lineageTag: d46cb268-be8b-4188-a9e4-fb1a4fb91045
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: e3547856-7e2d-4aef-9a2a-5b151de7e0f6
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Headlines = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 0849293aa0134794a71053fe592dab67
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

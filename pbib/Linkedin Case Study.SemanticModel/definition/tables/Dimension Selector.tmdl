@@ -1,0 +1,51 @@
+table 'Dimension Selector'
+	lineageTag: 6a698914-e509-4b9e-a5fe-59e296955d9c
+
+	column 'Dimension Selector'
+		lineageTag: a288ab4d-b9cc-41eb-b3ba-d133e3536b64
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Dimension Selector Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Dimension Selector Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dimension Selector Fields'
+		isHidden
+		lineageTag: 6397baf5-9f08-45af-a317-3e9f4c26f901
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Dimension Selector Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dimension Selector Order'
+		isHidden
+		formatString: 0
+		lineageTag: dc1a315c-81d1-4826-8186-0a77a065478d
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dimension Selector' = calculated
+		mode: import
+		source =
+				{
+				    ("Market", NAMEOF('dim_store'[market_code]), 0),
+				    ("Store", NAMEOF('dim_store'[store_name]), 1),
+				    ("Division", NAMEOF('dim_product'[division]), 2),
+				    ("Category", NAMEOF('dim_product'[category]), 3),
+				    ("Channel", NAMEOF('fact_sales'[channel]), 4)
+				}
+
+	annotation PBI_Id = 5a7497c6e08543cca20b9c2ea5e2859d
+

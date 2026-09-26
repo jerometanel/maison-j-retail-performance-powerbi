@@ -1,0 +1,126 @@
+table dim_store
+	lineageTag: 1ebc2118-3125-4a4e-af13-e84ff0f1b8e9
+
+	column store_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 653f4c45-7699-497e-9ba5-32a038da7e84
+		summarizeBy: none
+		sourceColumn: store_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_code
+		dataType: string
+		lineageTag: 40988dcb-0934-48f2-8a2d-33fbcc488074
+		summarizeBy: none
+		sourceColumn: store_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_name
+		dataType: string
+		lineageTag: 613abcec-14d6-4e8e-a1c1-cd075969a74c
+		summarizeBy: none
+		sourceColumn: store_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column market_code
+		dataType: string
+		lineageTag: 3903d497-a92b-409e-99a3-ada256a83689
+		summarizeBy: none
+		sourceColumn: market_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column country
+		dataType: string
+		lineageTag: b54bcb93-ea61-4e60-b684-4c51d0d2ab69
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: 2410e151-15b0-4923-9aa0-2e926b0b39d7
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: c16f5379-2b96-49ea-9276-bc26c4812cf8
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_format
+		dataType: string
+		lineageTag: e867e03b-a1d1-41fd-8235-bf9588b7682e
+		summarizeBy: none
+		sourceColumn: store_format
+
+		annotation SummarizationSetBy = Automatic
+
+	column local_currency
+		dataType: string
+		lineageTag: 57cc2efa-2038-45e8-b6fa-460349c821bd
+		summarizeBy: none
+		sourceColumn: local_currency
+
+		annotation SummarizationSetBy = Automatic
+
+	column fx_to_usd
+		dataType: double
+		lineageTag: 28fe21e1-b01e-4883-b350-31d6044376d8
+		summarizeBy: sum
+		sourceColumn: fx_to_usd
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column opening_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 563bf360-9569-4298-9dce-084538d26b85
+		summarizeBy: none
+		sourceColumn: opening_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column is_active
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: dba73e83-0cfe-4090-9ce9-2b257fe0ff2d
+		summarizeBy: none
+		sourceColumn: is_active
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_store = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(SourcePath), null, true),
+				    dim_store_Sheet = Source{[Item="dim_store",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(dim_store_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"store_key", Int64.Type}, {"store_code", type text}, {"store_name", type text}, {"market_code", type text}, {"country", type text}, {"city", type text}, {"region", type text}, {"store_format", type text}, {"local_currency", type text}, {"fx_to_usd", type number}, {"opening_date", Int64.Type}, {"is_active", type logical}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each [store_key] <> null and [store_key] <> ""),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Filtered Rows",{{"opening_date", type date}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

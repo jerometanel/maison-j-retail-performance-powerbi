@@ -1,0 +1,30 @@
+table 'PVM Step'
+	lineageTag: 713b45a0-27c3-45d7-bb06-1d49db57c5ec
+
+	column Step
+		lineageTag: 396c6bad-deca-4740-a20b-b93416d5799b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step]
+		sortByColumn: Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sort
+		formatString: 0
+		lineageTag: 483fb57d-db10-411d-ad62-07a36561e0a1
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Sort]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'PVM Step' = calculated
+		mode: import
+		source =
+				
+				DATATABLE ( "Step", STRING, "Sort", INTEGER,
+				    { { "Prior Year", 0 }, { "Price", 1 }, { "Volume", 2 }, { "Mix", 3 }, { "Returns", 4 } } )
+
+	annotation PBI_Id = 42f51c8833e34b118cc821ec4fc4030f
+

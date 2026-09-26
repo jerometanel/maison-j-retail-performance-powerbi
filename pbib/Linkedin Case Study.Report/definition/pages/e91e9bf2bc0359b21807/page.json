@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "e91e9bf2bc0359b21807",
+  "displayName": "Advisor Productivity",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920
+}

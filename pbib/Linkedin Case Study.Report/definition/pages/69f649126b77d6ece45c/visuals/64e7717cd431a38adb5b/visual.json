@@ -1,0 +1,199 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "64e7717cd431a38adb5b",
+  "position": {
+    "x": 1301.8572302292062,
+    "y": 110.88145896656535,
+    "z": 9000,
+    "height": 86.0790273556231,
+    "width": 300.54711246200606,
+    "tabOrder": 9000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metric Selector"
+                    }
+                  },
+                  "Property": "Metric Selector"
+                }
+              },
+              "queryRef": "Metric Selector.Metric Selector",
+              "nativeQueryRef": "Metric Selector",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "selection": [
+        {
+          "properties": {
+            "strictSingleSelect": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "filter": {
+              "filter": {
+                "Version": 2,
+                "From": [
+                  {
+                    "Name": "m",
+                    "Entity": "Metric Selector",
+                    "Type": 0
+                  }
+                ],
+                "Where": [
+                  {
+                    "Condition": {
+                      "In": {
+                        "Expressions": [
+                          {
+                            "Column": {
+                              "Expression": {
+                                "SourceRef": {
+                                  "Source": "m"
+                                }
+                              },
+                              "Property": "Metric Selector Fields"
+                            }
+                          }
+                        ],
+                        "Values": [
+                          [
+                            {
+                              "Literal": {
+                                "Value": "'''_Sales''[Units Sold]'"
+                              }
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "Annotations": {
+                      "filterExpressionMetadata": {
+                        "expressions": [
+                          {
+                            "Column": {
+                              "Expression": {
+                                "SourceRef": {
+                                  "Entity": "Metric Selector"
+                                }
+                              },
+                              "Property": "Metric Selector"
+                            }
+                          }
+                        ],
+                        "decomposedIdentities": {
+                          "values": [
+                            [
+                              {
+                                "0": [
+                                  {
+                                    "Literal": {
+                                      "Value": "'''_Sales''[Units Sold]'"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          ],
+                          "columns": [
+                            {
+                              "value": {
+                                "Column": {
+                                  "Expression": {
+                                    "SourceRef": {
+                                      "Entity": "Metric Selector"
+                                    }
+                                  },
+                                  "Property": "Metric Selector Fields"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "valueMap": [
+                          {
+                            "0": "Units Sold"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Metric'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "30D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

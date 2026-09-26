@@ -1,0 +1,52 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "ca5dc799ddde908da606",
+  "position": {
+    "x": 5.8358662613981762,
+    "y": 1041.7021276595744,
+    "z": 4000,
+    "height": 37.933130699088146,
+    "width": 1012.5227963525836,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "USD at constant FX. Anonymous sales excluded from client metrics. Synthetic data. Inventory generated to reconcile with sales.",
+                    "textStyle": {
+                      "fontStyle": "italic",
+                      "fontSize": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

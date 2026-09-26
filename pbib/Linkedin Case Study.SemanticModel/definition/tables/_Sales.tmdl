@@ -1,0 +1,181 @@
+table _Sales
+	lineageTag: 0f340a57-7baf-48d6-a812-65bc86a2a0a3
+
+	measure 'Net Sales' = SUM ( fact_sales[net_sales_usd] )
+		formatString: \$#,0.0;(\$#,0.0);\$#,0.0
+		lineageTag: 4c8f9dbc-d309-4a3b-8ba8-27dd9ee6553f
+
+	measure COGS = SUM ( fact_sales[cogs_usd] )
+		formatString: 0
+		lineageTag: d91207c6-dfa7-4dd1-9510-1e93f63c2c52
+
+	measure 'Gross Margin' = [Net Sales] - [COGS]
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: c079f24f-4f6a-4c5d-9c0d-99292dc12fb2
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'GM %' = DIVIDE ( [Gross Margin], [Net Sales] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: ba00a7f9-b5eb-4a46-be1b-bd3829649996
+
+	measure 'Sale Net Sales' = CALCULATE ( [Net Sales], fact_sales[transaction_type] = "Sale" )
+		lineageTag: a5012541-7bcf-409b-8d9e-9a7db68201ea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Return Value' = - CALCULATE ( [Net Sales], fact_sales[transaction_type] = "Return" )
+		lineageTag: 26ac0c2a-3861-44b3-a4f4-6a2ed9e63065
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Return Rate' = DIVIDE ( [Return Value], [Sale Net Sales] )
+		lineageTag: 350fde6f-5ee8-4349-ab2c-c755a21b3168
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Transactions =
+			
+			CALCULATE ( DISTINCTCOUNT ( fact_sales[transaction_number] ), fact_sales[transaction_type] = "Sale" )
+		formatString: #,0
+		lineageTag: 018df814-2093-4a79-865c-3052adcf4665
+
+	measure 'Units Sold' = CALCULATE ( SUM ( fact_sales[quantity] ), fact_sales[transaction_type] = "Sale" )
+		formatString: #,0
+		lineageTag: e79d1b15-699c-4712-a440-eb74bca7af1b
+
+	measure AOV = DIVIDE ( [Net Sales], [Transactions] )
+		formatString: \$#,0.0;(\$#,0.0);\$#,0.0
+		lineageTag: 61a39fe2-17d1-4aa4-8849-21f08ec9bdd4
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure UPT = DIVIDE ( [Units Sold], [Transactions] )
+		lineageTag: ddb4e6a3-e9e9-4079-a4c1-54f1c0aacbe1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure AUR = DIVIDE ( [Sale Net Sales], [Units Sold] )
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 2e330662-2575-4d9e-b6ea-eb034af2b15c
+
+	measure 'AUR PY' = CALCULATE ( [AUR], SAMEPERIODLASTYEAR ( dim_date[date] ) )
+		lineageTag: b802d575-c8a4-4ce6-addb-96817eac279d
+
+	measure 'Tourist Share' = DIVIDE ( CALCULATE ( [Net Sales], fact_sales[is_tax_free] = TRUE () ), [Net Sales] )
+		formatString: 0%;-0%;0%
+		lineageTag: d72910de-98a3-4226-a00d-e0334a40e196
+
+	measure 'Remote Sale Share' = DIVIDE ( CALCULATE ( [Net Sales], fact_sales[channel] = "Remote Sale" ), [Net Sales] )
+		lineageTag: 21a868b5-0773-430a-968a-d4357cb01c34
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PVM Returns' = - ( [Return Value] - CALCULATE ( [Return Value], SAMEPERIODLASTYEAR ( dim_date[date] ) ) )
+		lineageTag: bf8a8c88-364b-46fc-aba1-84aac99d84e2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PVM Volume' = ( [Units Sold] - [Units Sold PY] ) * [AUR PY]
+		lineageTag: 7afe89e3-d653-43ca-ab0f-475cd8ab362d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PVM Price' =
+			
+			SUMX (
+			    VALUES ( dim_product[subcategory] ),
+			    VAR q1 = [Units Sold]
+			    VAR p1 = [AUR]
+			    VAR p0 = [AUR PY]
+			    RETURN IF ( NOT ISBLANK ( p0 ) && q1 > 0, ( p1 - p0 ) * q1 )
+			)
+		lineageTag: fb09d71a-b3ab-4279-85da-b8d529feda33
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PVM Mix' = ```
+			
+			VAR p0bar = [AUR PY]
+			VAR q1tot = [Units Sold]
+			VAR p0q1 =
+			    SUMX (
+			        VALUES ( dim_product[subcategory] ),
+			        VAR q1 = [Units Sold]
+			        RETURN q1 * COALESCE ( [AUR PY], [AUR] )
+			    )
+			RETURN p0q1 - p0bar * q1tot
+			
+			```
+		lineageTag: d30acce6-b1de-408e-a532-b0a2f619ef5f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Net Sales PY' = CALCULATE ( [Net Sales], 'Time Intelligence'[Period] = "PY" )
+		formatString: \$#,0.0;(\$#,0.0);\$#,0.0
+		lineageTag: f87a5f22-da3a-4a88-b748-0a90f52a1755
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Units Sold PY' = CALCULATE ( [Units Sold], SAMEPERIODLASTYEAR ( dim_date[date] ) )
+		lineageTag: 0eac4d94-ce51-46c1-a68c-53f019a18128
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Net Sales YoY' = CALCULATE ( [Net Sales], 'Time Intelligence'[Period] = "YoY" )
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 8857139d-0d37-4631-b8bb-919854cbbbbc
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Net Sales YoY %' = CALCULATE ( [Net Sales], 'Time Intelligence'[Period] = "YoY %" )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 0bc67a8f-6e4c-44c4-ba1a-d6629fb9fd1c
+
+	measure 'PVM Value' =
+			
+			SWITCH ( SELECTEDVALUE ( 'PVM Step'[Step] ),
+			    "Prior Year", CALCULATE ( [Net Sales], SAMEPERIODLASTYEAR ( dim_date[date] ) ),
+			    "Price", [PVM Price],
+			    "Volume", [PVM Volume],
+			    "Mix", [PVM Mix],
+			    "Returns", [PVM Returns] )
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: b8756f15-35c9-40ec-a198-62cf71ff7d47
+
+	measure 'Store Header' =
+			
+			SELECTEDVALUE ( dim_store[store_name] ) & "  |  "
+			    & SELECTEDVALUE ( dim_store[city] ) & "  |  "
+			    & SELECTEDVALUE ( dim_store[store_format] ) & "  |  "
+			    & SELECTEDVALUE ( dim_date[year], "All years" )
+		lineageTag: c7b590cb-7446-4bd6-8d1d-e1b486f96faf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Selector Title' =
+			
+			VAR _metric =
+			    SUMMARIZE ( 'Metric Selector', 'Metric Selector'[Metric Selector], 'Metric Selector'[Metric Selector Fields] )
+			VAR _dim =
+			    SUMMARIZE ( 'Dimension Selector', 'Dimension Selector'[Dimension Selector], 'Dimension Selector'[Dimension Selector Fields] )
+			VAR _metricName =
+			    IF ( COUNTROWS ( _metric ) = 1, MAXX ( _metric, 'Metric Selector'[Metric Selector] ), "Net Sales" )
+			VAR _dimName =
+			    IF ( COUNTROWS ( _dim ) = 1, MAXX ( _dim, 'Dimension Selector'[Dimension Selector] ), "Market" )
+			RETURN
+			    _metricName & " by " & _dimName
+		lineageTag: 6d7b19a0-a3c2-4f4a-96cf-d2a2b9a01292
+
+	partition _Sales = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

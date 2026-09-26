@@ -1,0 +1,139 @@
+table fact_inventory_snapshot
+	lineageTag: 4da2b523-0b3a-4c3a-8319-0f0161b6f844
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 97e74beb-6782-48a0-b329-92310e68ceaf
+		summarizeBy: none
+		sourceColumn: date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column snapshot_date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 6a070593-ca6e-4718-a910-6533b661735f
+		summarizeBy: none
+		sourceColumn: snapshot_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column store_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 06c83246-0912-486b-93f2-2479624e8663
+		summarizeBy: none
+		sourceColumn: store_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 20b2fc86-4f79-4dee-8f1f-dd6028be8e37
+		summarizeBy: none
+		sourceColumn: product_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column opening_units
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a9cd9b6-d6f8-4248-b3c7-cd1f520df028
+		summarizeBy: sum
+		sourceColumn: opening_units
+
+		annotation SummarizationSetBy = Automatic
+
+	column units_received
+		dataType: int64
+		formatString: 0
+		lineageTag: ea764ed3-1b11-440b-9ced-0e2a5c486e60
+		summarizeBy: sum
+		sourceColumn: units_received
+
+		annotation SummarizationSetBy = Automatic
+
+	column units_sold_net
+		dataType: int64
+		formatString: 0
+		lineageTag: c63eebdf-ad12-4162-863a-87d999608168
+		summarizeBy: sum
+		sourceColumn: units_sold_net
+
+		annotation SummarizationSetBy = Automatic
+
+	column units_transferred_out
+		dataType: int64
+		formatString: 0
+		lineageTag: d0610c44-f2b0-4cdf-8984-203618283539
+		summarizeBy: sum
+		sourceColumn: units_transferred_out
+
+		annotation SummarizationSetBy = Automatic
+
+	column on_hand_units
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4a2271a7-81b9-43a3-9e49-4f333aef9775
+		summarizeBy: sum
+		sourceColumn: on_hand_units
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column on_hand_cost_usd
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 154f9bcd-fa31-4f5e-8096-130a458c7eac
+		summarizeBy: sum
+		sourceColumn: on_hand_cost_usd
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column on_hand_retail_usd
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 3557b057-9f41-41c0-8e51-fea2fd0b1fe8
+		summarizeBy: sum
+		sourceColumn: on_hand_retail_usd
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	partition fact_inventory_snapshot = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(ExtensionPath), null, true),
+				    fact_inventory_snapshot_Sheet = Source{[Item="fact_inventory_snapshot",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(fact_inventory_snapshot_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"date_key", Int64.Type}, {"snapshot_date", Int64.Type}, {"store_key", Int64.Type}, {"product_key", Int64.Type}, {"opening_units", Int64.Type}, {"units_received", Int64.Type}, {"units_sold_net", Int64.Type}, {"units_transferred_out", Int64.Type}, {"on_hand_units", Int64.Type}, {"on_hand_cost_usd", type number}, {"on_hand_retail_usd", Int64.Type}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"snapshot_date", type date}, {"on_hand_cost_usd", Currency.Type}, {"on_hand_retail_usd", Currency.Type}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
